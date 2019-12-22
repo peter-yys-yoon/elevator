@@ -5,7 +5,7 @@ sys.path.append(PROJECT_PATH)
 
 import cv2
 import numpy as np
-from elev.utils import draw_header
+from tiah.Drawing import draw_header
 from elev.opt import BLACK
 
 
@@ -16,7 +16,8 @@ def bs(videopath):
     print(cap.isOpened())
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
     fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
-    # fgbg = cv2.createBackgroundSubtractorMOG()
+    # fgbg = cv2.createBackgroundSubtractorMOG2()
+    # fgbg.setDetectShadows(True)
 
     count = 0
     while 1:

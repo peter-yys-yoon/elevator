@@ -1,5 +1,5 @@
 import argparse
-
+from vars import *
 
 parser = argparse.ArgumentParser(description='PyTorch AlphaPose Training')
 
@@ -8,11 +8,12 @@ parser = argparse.ArgumentParser(description='PyTorch AlphaPose Training')
 parser.add_argument("--image_folder", type=str,
                     default="data/samples", help="path to dataset")
 parser.add_argument("--model_def", type=str,
-                    default="/home/peter/workspace/code/yolov3/config/yolov3.cfg", help="path to model definition file")
+                    default=PATH_YOLO_CONFIG_FILE, help="path to model definition file")
 parser.add_argument("--weights_path", type=str,
-                    default="/home/peter/workspace/code/yolov3/weights/yolov3.weights", help="path to weights file")
+                    default=PATH_YOLO_WEIGHT_FILE, help="path to weights file")
+
 parser.add_argument("--class_path", type=str,
-                    default="/home/peter/workspace/code/yolov3/data/coco.names", help="path to class label file")
+                    default=PATH_YOLO_CLASSNAME_FILE, help="path to class label file")
 parser.add_argument("--conf_thres", type=float, default=0.8,
                     help="object confidence threshold")
 parser.add_argument("--nms_thres", type=float, default=0.4,
