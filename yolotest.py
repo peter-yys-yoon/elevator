@@ -89,14 +89,14 @@ if __name__ == "__main__":
     # videopath = '/home/peter/dataset/gist_elevator/raw_videosC001A002D001P0003T0005.avi'
 
     # videopath = '/home/peter/extra/dataset/gist/elevator/C001A002D001P0009T0001.avi'
-    videopath = '/home/peter/dataset/gist_elevator/raw_videos/C001A004D001P0003T0002.avi'
+    videopath = '/home/peter/workspace/dataset/gist/elevator/C001A004D001P0003T0002.avi'
     # videopath = args.video
     
     
     videoname = os.path.basename(videopath)
     print(videoname)
     count = 0
-    WAIT = 25
+    WAIT = 1
     
     cap = cv2.VideoCapture()
     cap.open(videopath)
@@ -143,6 +143,11 @@ if __name__ == "__main__":
         
         img = img.unsqueeze(0)
         input_imgs = Variable(img)
+
+
+
+
+        
         with torch.no_grad():
             detections = model(input_imgs.cuda())
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
