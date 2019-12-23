@@ -5,7 +5,7 @@ if __name__ == "__main__":
    
     
     "---------------------HERE-------------------------"    
-    DATAPATH = '/home/peter/extra/dataset/gist/elevator'
+    DATAPATH = '/home/peter/workspace/dataset/gist/elevator'
     ENV= 'elev'
     PROJECTPATH= '/home/peter/extra/Workspace/code/elev'
     PYNAME = 'yolotest.py'    
@@ -24,13 +24,18 @@ if __name__ == "__main__":
         if not vname.endswith('avi'):
             continue
         
-        
+        savepath = f'/home/peter/workspace/code/elev/output/yolo/yolo_{vname}'
+        if os.path.exists(savepath):
+            continue
+
         "---------------------HERE-------------------------"    
-        print('Running on ',vname,  idx , '/' , len(filelist))
+
         A_idx = vname.index('A')
         target = vname[A_idx:A_idx+4]
-        if target not in ['A002', 'A004', 'A006']:
+        if target not in [ 'A002']:
             continue
+
+        print('Running on ', vname, idx, '/', len(filelist))
         "---------------------------------------------------"    
 
         invideo = os.path.join(DATAPATH,vname)

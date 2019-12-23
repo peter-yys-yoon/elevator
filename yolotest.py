@@ -15,14 +15,15 @@ from yolo.utils.utils import *
 from yolo.utils.datasets import *
 
 from opt import opt
-
+from vars import *
 from tiah.tools import int2round, get_properties
 from tiah.vars import *
+from tiah.ntutool import *
+
 import time
-import datetime
 import argparse
 from tqdm import tqdm
-from PIL import Image
+
 
 import torch
 from torch.utils.data import DataLoader
@@ -88,7 +89,8 @@ if __name__ == "__main__":
     # videopath = '/home/peter/dataset/gist_elevator/raw_videosC001A002D001P0003T0005.avi'
 
     # videopath = '/home/peter/extra/dataset/gist/elevator/C001A002D001P0009T0001.avi'
-    videopath = args.video
+    videopath = '/home/peter/dataset/gist_elevator/raw_videos/C001A004D001P0003T0002.avi'
+    # videopath = args.video
     
     
     videoname = os.path.basename(videopath)
@@ -113,8 +115,15 @@ if __name__ == "__main__":
         savepath = f'/home/peter/extra/Workspace/code/elev/output/yolo/yolo_{videoname}'
         #ROTATE
         # savepath = f'/home/peter/extra/Workspace/code/elev/output/rotate_yolo_{videoname}'
+
+        savepath = f'{PROJECT_PATH}/output/yolo/yolo_{videoname}'
         print(savepath)
+        if os.path.exists(savepath):
+            quit()
+
         writer = cv2.VideoWriter(savepath, XVID, 25, framesize)
+
+
 
     name_desc = tqdm(range(pps[LENGTH]))
     while 1:
@@ -122,14 +131,12 @@ if __name__ == "__main__":
         if ret is False:
             break
 
-        
         out = frame.copy()
         
         # out = cv2.transpose(frame)
         # out = cv2.flip(out, flipCode=1)
         vis_frame = out.copy()
-        
-        
+
         img = transforms.ToTensor()(out)  # (3, W, H)
         img, _ = pad_to_square(img, 0)  # convert to N x N squre matrix, (3, W, W)
         img = resize(img, opt.img_size)  # (3, M, M)
@@ -140,8 +147,7 @@ if __name__ == "__main__":
             detections = model(input_imgs.cuda())
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
         
-        
-        
+
         if detections[0] is not None:
             # Rescale boxes to original image
             detections = rescale_boxes(detections[0], opt.img_size, vis_frame.shape[:2])
