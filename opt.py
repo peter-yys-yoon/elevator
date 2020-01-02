@@ -37,7 +37,7 @@ parser.add_argument('--wait', default=1, action='store', help='cv2.wait time')
 parser.add_argument('--save_video', dest='save_video',
                     help='whether to save rendered video', default=False, action='store_true')
 # parser.add_argument('--video', dest='video', help='video-name',default='/home/peter/workspace/dataset/gist/elevator/video/C001A002D001P0002T0001.avi')
-parser.add_argument('--video', dest='video', help='video-name',default='/home/peter/workspace/dataset/gist/elevator/video/C001A004D001P0003T0002.avi')
+parser.add_argument('--video', dest='video', help='video-name',default='/home/peter/workspace/dataset/gist/elevator/video/C001A002D001P0002T0001.avi')
 parser.add_argument('--outdir', dest='outdir', help='video-name',default='./output')
 
 opt = parser.parse_args()

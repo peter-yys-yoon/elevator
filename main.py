@@ -5,16 +5,22 @@ from opt import opt
 from tqdm import tqdm
 from pathlib import Path
 import time
+from random import randrange
 
 from vars import *
-from bgtest import BGsubs
-
+from mPaper import BGsubs
+from mFall import FallDetection
 
 from tiah.tools import read_video, get_framesize
 from tiah.vars import *
 from tiah.get_data import get_bbox_dict
 from tiah.Drawing import draw_header
 from tiah.pose import *
+
+
+preset_mm = randrange(1,46)
+cam_id = randrange(6)
+
 
 def get_dy_list():
     path = f'data/dyselect/good'
@@ -27,6 +33,19 @@ def get_dy_list():
         fflist.append(os.path.join(PATH_DATA_VIDEO,ff))
     return fflist
 
+def get_time_string(count):
+    
+    time_in_sec = count//25
+    mm , ss = divmod(time_in_sec, 60)
+    hh =17 
+
+    return f'Cam {cam_id}  {hh}:{mm+preset_mm}:{str(ss).zfill(2)}'
+
+def get_list(list_dict, count):
+    if count in list_dict.keys():
+        return list_dict[count]
+    else:
+        return []
 
 def video_reading():
     args = opt
@@ -50,6 +69,8 @@ def video_reading():
     name_desc = tqdm(range(atts[LENGTH]))
     count = 0
     bgmodel = BGsubs()
+    fallmodel = FallDetection(FALL_THRESHOLD)
+
     while 1:
         ret, frame = cap.read()
         if ret is False:
@@ -57,19 +78,12 @@ def video_reading():
 
         vis_frame = frame.copy()
         
+        bbox_list = get_list(bbox_list_dict,count)
+        pose_list= get_list(pose_list_dict,count)
         
-        if count in bbox_list_dict.keys():
-            bbox_list = bbox_list_dict[count]
-        else:
-            bbox_list = []
-            
-        if count in pose_list_dict.keys():
-            pose_list = pose_list_dict[count]
-        else:
-            pose_list = []
-
         for bbox in bbox_list: # drawing bbox
             idx, x1, y1, x2, y2, conf, cls_conf, cls_pred = bbox
+            #  if cls_pred =='person':
             cv2.rectangle(vis_frame, (x1, y1), (x2, y2), COLOR_GREEN, 1)
 
 
@@ -78,11 +92,17 @@ def video_reading():
         
         draw_pose(vis_frame, pose_list)
 
+        color =COLOR_BLACK
+        msg = ''
+        if fallmodel.detect(bbox_list):
+            color = COLOR_ORANGE
+            msg ='Fall-Down'
+        
 
         "-----------------------------------------------------------"
-
-
-        draw_header(vis_frame, count, COLOR_BLACK, scale=1,thick=1 )
+        header_label = get_time_string(count)
+        aa = f'{header_label} {msg}'
+        draw_header(vis_frame, count, color,msg = aa, scale=1,thick=1 )
         if args.save_video:
             writer.write(vis_frame)
         if args.vis:
@@ -91,6 +111,7 @@ def video_reading():
                 break
 
         name_desc.update(1)
+        
         count += 1
 
     if args.save_video:

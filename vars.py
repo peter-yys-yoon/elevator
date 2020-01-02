@@ -15,3 +15,6 @@ PATH_OUTPUT = join(PROJECT_PATH,'data/output')
 
 
 
+"-----------------------------------------------"
+
+FALL_THRESHOLD = 120
