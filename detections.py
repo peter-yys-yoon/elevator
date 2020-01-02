@@ -49,3 +49,32 @@ class BGsubs:
 
         return np.hstack((resized_mask, resized_org))
 
+
+class FallDetection:
+    def __init__(self, threshold):
+        self.counter = 0
+        self.fall_threshold = threshold
+
+    def detect(self, bbox_list):
+
+        for bbox in bbox_list:
+            idx, x1, y1, x2, y2, conf, cls_conf, cls_pred = bbox
+
+            if self.aspec_ratio([x1, y1, x2, y2]):
+                self.counter += 1
+                break
+
+        if self.counter > self.fall_threshold:
+            return True
+        else:
+            return False
+
+    def aspec_ratio(self, bbox):
+        x1, y1, x2, y2 = bbox
+        w = x2 - x1
+        h = y2 - y1
+
+        if w / h > 1:  # width is larger,
+            return True
+        else:  # height is larger
+            return False
