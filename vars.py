@@ -1,7 +1,10 @@
 from os.path import join
+import platform
 
-
-PROJECT_PATH = '/home/peter/workspace/code/elev'
+if platform.node() == 'obama':
+    PROJECT_PATH = '/home/peter/workspace/projects/xiah/Elev'
+else:
+    PROJECT_PATH = '/home/peter/dataset'
 
 PATH_YOLO_PROJECT= join(PROJECT_PATH,'yolo')
 PATH_YOLO_CONFIG_FILE = join(PATH_YOLO_PROJECT,'config/yolov3.cfg')
@@ -17,4 +20,4 @@ PATH_OUTPUT = join(PROJECT_PATH,'data/output')
 
 "-----------------------------------------------"
 
-FALL_THRESHOLD = 120
+FALL_THRESHOLD = 220

@@ -26,6 +26,8 @@ parser.add_argument("--img_size", type=int, default=416,
                     help="size of each image dimension")
 parser.add_argument("--checkpoint_model", type=str,
                     help="path to checkpoint model")
+parser.add_argument("--tmp", type=str,
+                    help="")
 
 "-------------------------------- TIAH ----------------------------------------"
 
